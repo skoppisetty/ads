@@ -1,12 +1,7 @@
-/*
- * C++ Program to Implement LeftList Heap
- */
 #include <iostream>
 #include <cstdlib>
 using namespace std;
-/*
- * Node Class Declaration
- */
+
 class LeftistNode
 {
     public:
@@ -27,9 +22,7 @@ class LeftistNode
             npl =  np;
         }
 };
-/*
- * Class Declaration
- */
+
 class LeftistHeap
 {
     public:

@@ -7,6 +7,10 @@
 #include <iostream>
 #include <queue>
 
+
+#include <time.h>
+
+
 using namespace std;
 #include "dijikstra.h"
 
@@ -50,80 +54,46 @@ bool is_connected(unordered_map<int, unordered_map<int,int>>& G, int n){
 	return true;
 }
 
+void generate_randomgraph(unordered_map<int, unordered_map<int,int>> & G, int n, double d){
+	double max_edges = (n * (n-1))/2;
+	int num_edges = ceil((d * max_edges)/100);
+	if(num_edges < n-1){
+		cout << "not possible" << endl;
+		exit(1);
+	}
 
+	//adjacency list of a graph
+	do{
+		int num = 0;
+		G.clear();
 
-int main(int argc, char *argv[]){
-	cout << argv[1] << endl;
-	unordered_map<int, unordered_map<int,int>> G;
-	int src,m,n, num_edges;
+		while (num != num_edges) {
+			int s = rand() % n;
+			int d = rand() % n;
+			int ecost = (rand() % 1000) + 1;
+			if (s == d)
+				continue;
 
-	if(string(argv[1]) == "-r"){
-		
-		n = atoi(argv[2]);
-		double d = atof(argv[3]);
-		src = atoi(argv[4]);
-		double max_edges = (n * (n-1))/2;
-		num_edges = ceil((d * max_edges)/100);
-		if(num_edges < n-1){
-			cout << "not possible" << endl;
-			exit(0);
-		}
-		
-		//adjacency list of a graph
-		do{
-			int num = 0;
-			G.clear();
+			//cout << "random" << endl;
 
-			while (num != num_edges) {
-				int s = rand() % n;
-				int d = rand() % n;
-				int ecost = (rand() % 1000) + 1;
-				if (s == d)
-					continue;
-
-				//cout << "random" << endl;
-
-				// check for edge 
-				unordered_map<int,int>::const_iterator got = G[s].find (d);
-				if(got == G[s].end()){
-					//cout << "added edge "<< s << " " << d << endl;
-					G[s][d]=ecost;
-					G[d][s]=ecost;
-					num++;
-
-				}
+			// check for edge 
+			unordered_map<int,int>::const_iterator got = G[s].find (d);
+			if(got == G[s].end()){
+				//cout << "added edge "<< s << " " << d << endl;
+				G[s][d]=ecost;
+				G[d][s]=ecost;
+				num++;
 
 			}
-		}while(!is_connected(G,n));
-		m = n;
-		n = num_edges;
-		cout << "DOne "<< m << " " << n << endl;
-	}
-	else  {
-		string filename=argv[2]; 
-		ifstream myfile(filename);
-		myfile >> src; 		
-		myfile >> m;
-		myfile >> n;		
 
-		// adjacency list - a matrix with G[a][b] = c
-		// indicates that the edge between a to b with cost c.
-		// unordered_map<int, unordered_map<int,int>> G; 
-		int a,b,c;
-		while (myfile >> a){   // populate the adjacency lists
-			myfile >> b >> c;
-			G[a][b]=c;
-			G[b][a]=c;
 		}
+	}while(!is_connected(G,n));
+	cout << "Generated random graph" << endl;
+}
 
-	}
-		type method;
+
+void prep_dijikstra(unordered_map<int, unordered_map<int,int>> & G, int m, int n, int src, type method, int mode){
 		vector<int> spath;
-		cout << m << " " << src << endl; 
-		if(string(argv[1]) != "-l")
-			method = leftist;
-		else method = fib;
-
 		for(int i = 0; i < m ; i++){
 			int sval = 0;
 			spath = dijikstra(G,src,i,method);  // Run dijkstra to find shortest path
@@ -131,7 +101,7 @@ int main(int argc, char *argv[]){
 			// traverse through shortest path to find path weight
 			// cout << "source :"<< src << " Dest: " << i << "		";
 			if(spath.empty()){
-				cout << "0" << endl;
+				// cout << "0" << endl;
 				continue;
 			}
 			for(int i=0;i< spath.size()-1;i++){ 
@@ -139,14 +109,68 @@ int main(int argc, char *argv[]){
 				int d=spath[i+1];
 				sval += G[s][d];
 			}
-
-			cout << sval << endl;   // Print the path weight
-
+			if(mode == 1){
+				cout << sval << endl;   // Print the path weight
+			}
 			// for(int i=0; i < spath.size(); i++){ // print the path
 			// 	cout << spath[i] << " "; 
 			// }
-
 		}
+}
 
-	return 0;
+void read_file(unordered_map<int, unordered_map<int,int>> & G, int &m, int &n, int &src, string filename){
+	 
+	ifstream myfile(filename);
+	myfile >> src; 		
+	myfile >> m;
+	myfile >> n;		
+
+	// adjacency list - a matrix with G[a][b] = c
+	// indicates that the edge between a to b with cost c.
+	// unordered_map<int, unordered_map<int,int>> G; 
+	int a,b,c;
+	while (myfile >> a){   // populate the adjacency lists
+		myfile >> b >> c;
+		G[a][b]=c;
+		G[b][a]=c;
+	}
+
+}
+
+int main(int argc, char *argv[]){
+	unordered_map<int, unordered_map<int,int>> G;
+	int src,m,n; 
+	type method;
+	if(string(argv[1]) == "-r"){
+		// perfomrnace mode
+		m = atoi(argv[2]);
+		double d = atof(argv[3]);
+		src = atoi(argv[4]);
+		generate_randomgraph(G,m,d);
+		clock_t Start_fib, Time_fib;
+		clock_t Start_left, Time_left;
+		Start_fib = clock();
+		prep_dijikstra(G,m,n,src,fib,0);
+		Time_fib = clock() - Start_fib;
+		Start_left = clock();
+		prep_dijikstra(G,m,n,src,leftist,0);
+		Time_left = clock() - Start_left;
+
+		cout << "Execution time for fibonacci heap: " << Time_fib << endl;
+		cout << "Execution time for Leftist tree: " << Time_left << endl;
+
+
+	}
+	else if(string(argv[1]) == "-f"){
+		string filename=argv[2];
+		read_file(G,m,n,src,filename);
+		method = fib;
+		prep_dijikstra(G,m,n,src,method,1);
+	}
+	else{
+		string filename=argv[2];
+		read_file(G,m,n,src,filename);
+		method = leftist;
+		prep_dijikstra(G,m,n,src,method,1);
+	}	
 }
