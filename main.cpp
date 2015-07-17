@@ -10,7 +10,7 @@
 using namespace std;
 #include "dijikstra.h"
 
-
+// returns true if its a connected graph else false
 bool is_connected(unordered_map<int, unordered_map<int,int>>& G, int n){
 	bool connected = false;
 	int visited[n];	
@@ -50,21 +50,30 @@ bool is_connected(unordered_map<int, unordered_map<int,int>>& G, int n){
 	return true;
 }
 
+
+
 int main(int argc, char *argv[]){
 	cout << argv[1] << endl;
 	unordered_map<int, unordered_map<int,int>> G;
-	int src,m,n;
-	
+	int src,m,n, num_edges;
+
 	if(string(argv[1]) == "-r"){
-		cout << "random" << endl;
-		int n = atoi(argv[2]);
-		double d = atoi(argv[3]);
-		int src = atoi(argv[4]);
-		int num_edges = ceil((d * n * (n-1))/200);
+		
+		n = atoi(argv[2]);
+		double d = atof(argv[3]);
+		src = atoi(argv[4]);
+		double max_edges = (n * (n-1))/2;
+		num_edges = ceil((d * max_edges)/100);
+		if(num_edges < n-1){
+			cout << "not possible" << endl;
+			exit(0);
+		}
+		
 		//adjacency list of a graph
 		do{
 			int num = 0;
 			G.clear();
+
 			while (num != num_edges) {
 				int s = rand() % n;
 				int d = rand() % n;
@@ -72,10 +81,12 @@ int main(int argc, char *argv[]){
 				if (s == d)
 					continue;
 
+				//cout << "random" << endl;
+
 				// check for edge 
 				unordered_map<int,int>::const_iterator got = G[s].find (d);
 				if(got == G[s].end()){
-					cout << "added edge "<< s << " " << d << endl;
+					//cout << "added edge "<< s << " " << d << endl;
 					G[s][d]=ecost;
 					G[d][s]=ecost;
 					num++;
@@ -83,9 +94,10 @@ int main(int argc, char *argv[]){
 				}
 
 			}
-		}while(is_connected(G,n));
+		}while(!is_connected(G,n));
 		m = n;
 		n = num_edges;
+		cout << "DOne "<< m << " " << n << endl;
 	}
 	else  {
 		string filename=argv[2]; 
@@ -107,10 +119,10 @@ int main(int argc, char *argv[]){
 	}
 		type method;
 		vector<int> spath;
-
-		if(argv[1] == "-f")
-			method = fib;
-		else method = leftist;
+		cout << m << " " << src << endl; 
+		if(string(argv[1]) != "-l")
+			method = leftist;
+		else method = fib;
 
 		for(int i = 0; i < m ; i++){
 			int sval = 0;

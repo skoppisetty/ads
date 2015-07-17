@@ -2,9 +2,6 @@ CC = g++
 
 CFLAGS = -std=c++11
 
-#all: Fibonacci.o dijikstra.o  main.o
-#	$(CC) -std=c++11 Fibonacci.o dijikstra.o  main.o -o main 
-
 all: Fibonacci.o leftist.o dijikstra.o  main.o
 	$(CC)  $(CFLAGS) Fibonacci.o leftist.o dijikstra.o main.o -o main 
 
