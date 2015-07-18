@@ -37,8 +37,6 @@ class Fibonacci_heap{
 		}
 		node* Insert(int,int);
 		node* RemoveMin();
-		// void Meld(node*,node*);
-		// void Remove(node*);
 		void DecreaseKey(int,int,int);
 		void DecreaseKey(node*,int);
 		bool empty();
