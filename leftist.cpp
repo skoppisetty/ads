@@ -29,16 +29,6 @@ LeftistHeap::~LeftistHeap()
     makeEmpty( );
 }
  
-/**
-* Merge 
-**/
-// void LeftistHeap::Merge(LeftistHeap &rhs)
-// {
-//     if (this == &rhs)
-//         return;
-//     root = Merge(root, rhs.root);
-//     rhs.root = NULL;
-// }
 
 /**
  * Melds two leftist nodes and their childrn 
@@ -225,47 +215,22 @@ bool LeftistHeap::empty()
     return root == NULL;
 }
  
-
-// bool LeftistHeap::isFull()
-// {
-//     return false;
-// }
- 
-
 void LeftistHeap::makeEmpty()
 {
     reclaimMemory(root);
     root = NULL;
 }
  
-
-// LeftistHeap &LeftistHeap::operator=(LeftistHeap & rhs)
-// {
-//     if (this != &rhs)
-//     {
-//         makeEmpty();
-//         root = clone(rhs.root);
-//     }
-//     return *this;
-// }
  
 
-// void LeftistHeap::reclaimMemory(LeftistNode * t)
-// {
-//     if (t != NULL)
-//     {
-//         reclaimMemory(t->left);
-//         reclaimMemory(t->right);
-//         delete t;
-//     }
-// }
+void LeftistHeap::reclaimMemory(LeftistNode * t)
+{
+    if (t != NULL)
+    {
+        reclaimMemory(t->left);
+        reclaimMemory(t->right);
+        delete t;
+    }
+}
  
-
-// LeftistNode *LeftistHeap::clone(LeftistNode * t)
-// {
-//     if (t == NULL)
-//         return NULL;
-//     else
-//         return new LeftistNode(t->vertex, t->data, clone(t->left), clone(t->right), t->npl);
-// }
  
