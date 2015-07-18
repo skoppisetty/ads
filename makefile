@@ -3,7 +3,7 @@ CC = g++
 CFLAGS = -std=c++11
 
 all: Fibonacci.o leftist.o dijikstra.o  main.o
-	$(CC)  $(CFLAGS) Fibonacci.o leftist.o dijikstra.o main.o -o main 
+	$(CC)  $(CFLAGS) Fibonacci.o leftist.o dijikstra.o main.o -o dijikstra 
 
 main.o: main.cpp
 	$(CC) $(CFLAGS) -c  main.cpp
@@ -18,5 +18,5 @@ Fibonacci.o: Fibonacci.cpp
 	$(CC) $(CFLAGS) -c Fibonacci.cpp
 
 clean:
-	rm -f sample
+	rm -f dijikstra
 	rm -f *.o
