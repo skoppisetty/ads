@@ -14,7 +14,24 @@
 using namespace std;
 #include "dijikstra.h"
 
-// returns true if its a connected graph else false
+
+/**
+* checks whether the graph is connected or not
+*
+*  This function takes in the adjacency list and number of vertices and 
+*  checks whether the graph represented by the adjacency list is connected or not.
+*
+* @param G
+*   Adjacency list as unordered_map<int, unordered_map<int,int>>&
+* @param int
+*   number of vertices
+*
+* @return
+*   true - if connected
+*   false - if not connected
+*
+*/
+
 bool is_connected(unordered_map<int, unordered_map<int,int>>& G, int n){
 	bool connected = false;
 	int visited[n];	
@@ -54,6 +71,24 @@ bool is_connected(unordered_map<int, unordered_map<int,int>>& G, int n){
 	return true;
 }
 
+
+/**
+* Generate random graph for measuring perfomance
+*
+*  This function takes in the adjacency list and number of vertices and 
+*  density and generates a random graph and populates the adjacency list
+*
+* @param G
+*   Adjacency list as unordered_map<int, unordered_map<int,int>>&
+* @param n
+*   number of vertices
+* @param d
+*   density of graph
+*
+* @return
+*  VOID
+*
+*/
 void generate_randomgraph(unordered_map<int, unordered_map<int,int>> & G, int n, double d){
 	double max_edges = (n * (n-1))/2;
 	int num_edges = ceil((d * max_edges)/100);
@@ -92,6 +127,28 @@ void generate_randomgraph(unordered_map<int, unordered_map<int,int>> & G, int n,
 }
 
 
+
+/**
+*  Calls dijikstra and prints the source to all destination distances
+*
+*  This function takes in the adjacency list and number of vertices and 
+*  number of edges, source node, and type and prints the source to all destination distances
+*
+* @param G
+*   Adjacency list as unordered_map<int, unordered_map<int,int>>&
+* @param m
+*   number of vertices
+* @param n
+*   number of edges
+* @param src
+*   source vertex
+* @param type
+*   enum - fib or leftist - denotes which data type to use
+*
+* @return
+*  VOID
+*
+*/
 void prep_dijikstra(unordered_map<int, unordered_map<int,int>> & G, int m, int n, int src, type method, int mode){
 		vector<int> spath;
 		for(int i = 0; i < m ; i++){
@@ -118,6 +175,28 @@ void prep_dijikstra(unordered_map<int, unordered_map<int,int>> & G, int m, int n
 		}
 }
 
+
+/**
+*  Loads the given file into adjacency list representation of a graph
+*
+*  This function takes in the adjacency list and number of vertices and 
+*  number of edges, source node, and filename this loads the given file into adjacency list representation of a graph
+*
+* @param G
+*   Adjacency list as unordered_map<int, unordered_map<int,int>>&
+* @param m
+*   number of vertices
+* @param n
+*   number of edges
+* @param src
+*   source vertex
+* @param filename
+*   string filename - indicating the input file name
+*
+* @return
+*  VOID - graph is populated into G
+*
+*/
 void read_file(unordered_map<int, unordered_map<int,int>> & G, int &m, int &n, int &src, string filename){
 	 
 	ifstream myfile(filename);
@@ -137,6 +216,30 @@ void read_file(unordered_map<int, unordered_map<int,int>> & G, int &m, int &n, i
 
 }
 
+
+/**
+*  Main function which runs in -r , -f , -l mode
+*
+*  -r mode:
+* 		generates a random graph (connected)
+*		runs dijikstra using Fibonacci and measures time
+* 		runs dijikstra using leftist tree and measures time
+* 		prints time for further comparison
+*		
+*		$dijikstra -r n d x
+*
+*	-l mode:
+*		loads the graph from the given file and runs dijikstra using leftist tree
+*		prints source to all destinations distances
+*   
+*		$dijikstra -l file-name // read the input from a file ‘file-name’ for leftist tree scheme
+
+*	-f mode:
+*		loads the graph from the given file and runs dijikstra using Fibonacci heap
+*		prints source to all destinations distances
+*
+*		$dijikstra -f file-name // read the input from a file ‘file-name’ for Fibonacci heap scheme
+*/
 int main(int argc, char *argv[]){
 	unordered_map<int, unordered_map<int,int>> G;
 	int src,m,n; 
