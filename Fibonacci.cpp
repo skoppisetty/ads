@@ -374,7 +374,7 @@ void Fibonacci_heap::DecreaseKey(node* ptr, int newdata){
  * @param ptr
  *   ptr node
  * @param data
- *   value of data
+ *   value of newdata
  * @param newdata
  *   value of newdata
  * 
@@ -471,10 +471,17 @@ bool Fibonacci_heap::empty(){
 	}
 }
 
+/**
+*  This is only used for debug purposes to check if 
+*  Fibonacci implementation is stable. 
+**/
 bool Fibonacci_heap::Treechecker(){
 	return checker(root,-1,-1);
 }
 
+/** 
+* Helper Function for TreeChecker 
+**/
 bool Fibonacci_heap::checker(node* ptr, int data, int vertex){
 	if(ptr==NULL){
 		return true;
@@ -490,4 +497,3 @@ bool Fibonacci_heap::checker(node* ptr, int data, int vertex){
 		}
 	}
 }
-
