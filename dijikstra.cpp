@@ -1,8 +1,27 @@
+/**
+ * This is Dijikstra's implementation. 
+ *
+ **/
 #include <iostream>
 #include "dijikstra.h"
-
 using namespace std;
 
+
+/**
+ * Implements dijikstras algorithm 
+ *
+ * @param G
+ *   Graph represented as an adjacency list 
+ * @param src
+ *   source node value
+ * @param des
+ *	 destination node value
+ * @param Type 
+ *   Underlying data structure used(fib heap/leftist tree)
+ *
+ * @return
+ *   vector of distances of each node from source node
+ **/
 vector<int> dijikstra(unordered_map<int, unordered_map<int,int>> &G, int src, int des, type Type){
 	int* dist = new int[G.size()];
 	int* prev = new int[G.size()];
@@ -100,8 +119,6 @@ vector<int> dijikstra(unordered_map<int, unordered_map<int,int>> &G, int src, in
 	//cout << endl;
 	return path;
 	}
-
-
 }
 
 

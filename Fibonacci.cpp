@@ -1,17 +1,31 @@
+/**
+ * This is a Fibonacci heap implementation. 
+ *
+ **/
 #include <iostream>
 #include <cmath>
 #include <stack>
 #include <vector>
 #include <unordered_map>
 #include "Fibonacci.h"
-
 using namespace std;
 
+/**
+ * Inserts new node into the heap 
+ *
+ * @param vertex
+ *   The vertex that needs to be inserted. This is the node
+ *   number 
+ * @param dist
+ *   This is the distance of this node from the source node. 
+ * 
+ * @return
+ *   root node
+ **/
 node* Fibonacci_heap::Insert(int vertex, int dist){
 	if(root==NULL){	
 		// cout << "Inserting root " << vertex << " " << dist << endl;			
 		root = new node(vertex,dist);	// Allocate memory for root
-
 		root->left=root;
 		root->right=root;
 		num++;
@@ -19,7 +33,6 @@ node* Fibonacci_heap::Insert(int vertex, int dist){
 	} else {
 		// cout << "Inserting element " << vertex << " " << dist << endl;
 		node* n = new node(vertex,dist); // Allocate memory for the element to be inserted
-
 		root->left->right = n;		// Insert node into root's doubly linked list
 		n->right = root;
 		n->left = root->left;
@@ -27,13 +40,14 @@ node* Fibonacci_heap::Insert(int vertex, int dist){
 
 		if(n->data < root->data){ // Change root if the inserted element is the minimum.
 			// cout << "changing root to " << vertex << " " << dist << endl; 
-				root = n;
+			root = n;
 		}
 		num++;
 		return n;
 	}
 }
 
+ 
 void Fibonacci_heap::Link(node* p2,node* p1){
 	p2->left->right = p2->right; // sever connections of p2
 	p2->right->left = p2->left;
@@ -49,10 +63,12 @@ void Fibonacci_heap::Link(node* p2,node* p1){
 		p1->child->left->right = p2;
 		p1->child->left = p2;
 	}
-
 	p1->degree++; // Incriment the degree of p1
 }
 
+ /**
+ * Consolidates the heap 
+ */
 void Fibonacci_heap::Consolidate(){
 	unordered_map<int,node*> mp;
 	int d;
@@ -192,6 +208,13 @@ void Fibonacci_heap::Consolidate(){
 
 // }
 
+ /**
+ * Remove min node from heap  
+ *
+ * @return
+ *   NULL if heap is empty
+ *   else return root. 
+  */
 node* Fibonacci_heap::RemoveMin(){
 	// cout << "RemoveMin" << endl;
 	if(root==NULL){			// If heap is empty return NULL
@@ -257,6 +280,18 @@ node* Fibonacci_heap::RemoveMin(){
 	return r;
 }
 
+ /**
+ * Finds the given node in heap 
+ *
+ * @param ptr
+ *   node pointer
+ * @param vertex
+ *   vertex value
+ * @param data 
+ *    data value
+ * @return
+ *   NULL if it is not found else return the node 
+ */
 node* Fibonacci_heap::Find(node* ptr, int vertex,int data){
 
 	if(ptr==NULL) return NULL;
@@ -289,6 +324,17 @@ node* Fibonacci_heap::Find(node* ptr, int vertex,int data){
 	return p;
 }
 
+ /**
+ * Decreases the key value with ptr and new data
+ *
+ * @param ptr
+ *   ptr node
+ * @param newdata
+ *   value of newdata
+ * 
+ * @return
+ *   void
+  */
 void Fibonacci_heap::DecreaseKey(node* ptr, int newdata){
 	if(root==NULL) return;
 
@@ -322,6 +368,19 @@ void Fibonacci_heap::DecreaseKey(node* ptr, int newdata){
 	}
 }
 
+ /**
+ * Decreases the key value with ptr and new data and data
+ *
+ * @param ptr
+ *   ptr node
+ * @param data
+ *   value of data
+ * @param newdata
+ *   value of newdata
+ * 
+ * @return
+ *   void
+  */
 void Fibonacci_heap::DecreaseKey(int vertex, int data, int newdata){
 	if(root==NULL) return;
 
