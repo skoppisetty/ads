@@ -1,30 +1,56 @@
+/**
+ * This is a Leftist tree implementation. 
+ *
+ **/
 #include "leftist.h"
 
+/**
+* Constructor
+**/
 LeftistHeap::LeftistHeap()
 {
     root = NULL;
 }
 
+/**
+* Constructor
+**/
 LeftistHeap::LeftistHeap(LeftistHeap &rhs)
 {
     root = NULL;
     *this = rhs;
 }
  
-
+/**
+* Destructor
+**/
 LeftistHeap::~LeftistHeap()
 {
     makeEmpty( );
 }
  
-void LeftistHeap::Merge(LeftistHeap &rhs)
-{
-    if (this == &rhs)
-        return;
-    root = Merge(root, rhs.root);
-    rhs.root = NULL;
-}
- 
+/**
+* Merge 
+**/
+// void LeftistHeap::Merge(LeftistHeap &rhs)
+// {
+//     if (this == &rhs)
+//         return;
+//     root = Merge(root, rhs.root);
+//     rhs.root = NULL;
+// }
+
+/**
+ * Melds two leftist nodes and their childrn 
+ *
+ * @param h1
+ *   node1 to be melded
+ * @param h2
+ *   node 2 to be melded
+ * 
+ * @return
+ *   pointer to the root of the merged tree
+ **/
 LeftistNode *LeftistHeap::Merge(LeftistNode * h1, LeftistNode * h2)
 {
     if (h1 == NULL)
@@ -36,7 +62,10 @@ LeftistNode *LeftistHeap::Merge(LeftistNode * h1, LeftistNode * h2)
     else
         return Merge1(h2, h1);
 }
- 
+
+/**
+* Helper Function used by merge
+**/
 LeftistNode *LeftistHeap::Merge1(LeftistNode * h1, LeftistNode * h2)
 {
     if (h1->left == NULL)
@@ -50,7 +79,10 @@ LeftistNode *LeftistHeap::Merge1(LeftistNode * h1, LeftistNode * h2)
     }
     return h1;
 }
- 
+
+/**
+* Helper function used by Merge1 hence by merge()
+**/
 void LeftistHeap::swapChildren(LeftistNode * t)
 {
     LeftistNode *tmp = t->left;
@@ -58,6 +90,18 @@ void LeftistHeap::swapChildren(LeftistNode * t)
     t->right = tmp;
 }
  
+
+/**
+ * Inserts a new node into the leftist tree
+ *
+ * @param x
+ *    vertes
+ * @param y
+ *   distance from source node
+ * 
+ * @return
+ *   pointer to the root of the merged tree
+ **/
 LeftistNode *  LeftistHeap::Insert(int x, int y)
 {   
     LeftistNode * node = new LeftistNode(x,y);
@@ -65,13 +109,25 @@ LeftistNode *  LeftistHeap::Insert(int x, int y)
     return node;
 }
  
-
+/**
+ * Find min in the leftist tree
+ *
+ *  
+ * @return
+ *   distance from source node
+ **/
 int &LeftistHeap::findMin()
 {
     return root->data;
 }
  
-
+/**
+ * Remove min in the leftist tree
+ *
+ *  
+ * @return
+ *   Pointer to the min node that is deleted
+ **/
 LeftistNode * LeftistHeap::RemoveMin()
 {
     LeftistNode *oldRoot = root;
@@ -79,6 +135,20 @@ LeftistNode * LeftistHeap::RemoveMin()
     return oldRoot;
 }
  
+/**
+ * Find the parent of the node that is deleted and join the 
+ * child of deleted node with parent. 
+ *
+ * @param origin
+ *    recursive root to start searching from 
+ * @param curr
+ *    the node being deleted
+ * @param child 
+ *    the subtree under the curr. 
+ *
+ * @return
+ *   1 if curr deletion is done else 0
+ **/
 int LeftistHeap::link_node(LeftistNode * origin, LeftistNode * curr, LeftistNode * child){
     if(origin){
         if(origin == curr){
@@ -111,6 +181,19 @@ int LeftistHeap::link_node(LeftistNode * origin, LeftistNode * curr, LeftistNode
 
 }
 
+/**
+ * Decreases the key value. This is implemented
+ * by deleting that key and inserting a new node 
+ * with the new value. 
+ *
+ * @param curr
+ *    The node whose value needs to be decreased. 
+ * @param newdist
+ *    the new distance value.
+ *
+ * @return
+ *   root node
+ **/
 LeftistNode * LeftistHeap::DecreaseKey(LeftistNode * curr, int newdist){
     LeftistNode * temp = curr;
     //cout << "decrease key " << curr->vertex << endl;
@@ -136,17 +219,17 @@ LeftistNode * LeftistHeap::DecreaseKey(LeftistNode * curr, int newdist){
     //cout << "Decrease key done" << endl;
 }
 
-
+/* Checks if leftist heap is empty */
 bool LeftistHeap::empty()
 {
     return root == NULL;
 }
  
 
-bool LeftistHeap::isFull()
-{
-    return false;
-}
+// bool LeftistHeap::isFull()
+// {
+//     return false;
+// }
  
 
 void LeftistHeap::makeEmpty()
@@ -156,33 +239,33 @@ void LeftistHeap::makeEmpty()
 }
  
 
-LeftistHeap &LeftistHeap::operator=(LeftistHeap & rhs)
-{
-    if (this != &rhs)
-    {
-        makeEmpty();
-        root = clone(rhs.root);
-    }
-    return *this;
-}
+// LeftistHeap &LeftistHeap::operator=(LeftistHeap & rhs)
+// {
+//     if (this != &rhs)
+//     {
+//         makeEmpty();
+//         root = clone(rhs.root);
+//     }
+//     return *this;
+// }
  
 
-void LeftistHeap::reclaimMemory(LeftistNode * t)
-{
-    if (t != NULL)
-    {
-        reclaimMemory(t->left);
-        reclaimMemory(t->right);
-        delete t;
-    }
-}
+// void LeftistHeap::reclaimMemory(LeftistNode * t)
+// {
+//     if (t != NULL)
+//     {
+//         reclaimMemory(t->left);
+//         reclaimMemory(t->right);
+//         delete t;
+//     }
+// }
  
 
-LeftistNode *LeftistHeap::clone(LeftistNode * t)
-{
-    if (t == NULL)
-        return NULL;
-    else
-        return new LeftistNode(t->vertex, t->data, clone(t->left), clone(t->right), t->npl);
-}
+// LeftistNode *LeftistHeap::clone(LeftistNode * t)
+// {
+//     if (t == NULL)
+//         return NULL;
+//     else
+//         return new LeftistNode(t->vertex, t->data, clone(t->left), clone(t->right), t->npl);
+// }
  

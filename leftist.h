@@ -30,7 +30,7 @@ class LeftistHeap
         LeftistHeap(LeftistHeap &rhs);
         ~LeftistHeap();
         bool empty();
-        bool isFull();
+        //bool isFull();
         int &findMin();
         LeftistNode * Insert(int x, int y);
         LeftistNode * RemoveMin();
@@ -39,14 +39,14 @@ class LeftistHeap
         int link_node(LeftistNode * origin, LeftistNode * curr, LeftistNode * child);
         void makeEmpty();
         void Merge(LeftistHeap &rhs);
-        LeftistHeap & operator=(LeftistHeap &rhs);
+        //LeftistHeap & operator=(LeftistHeap &rhs);
     private:
         LeftistNode *root;
         LeftistNode *Merge(LeftistNode *h1, LeftistNode *h2);
         LeftistNode *Merge1(LeftistNode *h1, LeftistNode *h2);
         void swapChildren(LeftistNode * t);
-        void reclaimMemory(LeftistNode * t);
-        LeftistNode *clone(LeftistNode *t);
+        //void reclaimMemory(LeftistNode * t);
+        //LeftistNode *clone(LeftistNode *t);
 
 };
  
